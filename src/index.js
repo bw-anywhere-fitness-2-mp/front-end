@@ -9,7 +9,8 @@ import {
 
 import { NotFoundPage } from './components/pages/NotFound';
 import { ExampleListPage } from './components/pages/ExampleList';
-import { LoginPage } from './components/pages/Login';
+import LoginPage from './components/pages/Login/LoginPage';
+import SignUpPage from './components/pages/SignUp/SignUpPage';
 import { LandingPage } from './components/pages/Landing';
 
 ReactDOM.render(
@@ -35,6 +36,7 @@ function App() {
   return (
     <Switch>
       <Route path="/login" component={LoginPage} />
+      <Route path="/signup" component={SignUpPage} />
       <Route path="/landing" component={LandingPage} />
       {/* any of the routes you need secured should be registered as SecureRoutes */}
       <Route path="/" exact component={() => <LandingPage />} />
