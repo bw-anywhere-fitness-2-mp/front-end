@@ -23,8 +23,8 @@ const Container = styled.div`
   border-bottom: 3px solid black;
 `;
 const PageTitle = styled.div`
-  background-color: #dcdcdc;
-  color: black;
+  background-color: #2f4f4f;
+  color: white;
   padding: 0.8%;
   border: 2px solid black;
   border-right: 5px solid black;
