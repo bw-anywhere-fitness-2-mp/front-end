@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
+import { BrowserRouter as Router, Link, Route } from 'react-router-dom';
 
 const initialFormValues = {
   email: '',
@@ -15,24 +16,37 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #dcdcdc;
+  background-color: #778899;
   height: 99vh;
+  border-left: 3px solid black;
+  border-right: 3px solid black;
+  border-bottom: 3px solid black;
+`;
+const PageTitle = styled.div`
+  background-color: #dcdcdc;
+  color: black;
+  padding: 0.8%;
+  border: 2px solid black;
+  border-right: 5px solid black;
+  border-left: 5px solid black;
 `;
 const Header = styled.div`
+  border: 3px solid black;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-evenly;
   align-items: center;
-  background-color: black;
+  background-color: white;
   width: 100%;
   height: 10vh;
-  color: white;
+  color: black;
 `;
 const Navigation = styled.div`
   padding: 2%;
   margin: 1%;
   &:hover {
-    background-color: white;
-    color: black;
+    background-color: #dcdcdc;
+    color: white;
+    text-decoration: none;
     border-radius: 5%;
   }
 `;
@@ -43,8 +57,8 @@ const SignUpContainer = styled.div`
   border: 5px solid black;
   width: 60%;
   margin: 10%;
-  background-color: #778899;
-  color: white;
+  background-color: #dcdcdc;
+  color: black;
 `;
 const IndividualForm = styled.div`
   margin: 8% 0%;
@@ -77,27 +91,32 @@ const SignUpPage = () => {
   return (
     <Container>
       <Header className="headerNav">
+        <PageTitle>
+          <h1>Anywhere Fitness</h1>
+        </PageTitle>
         <Navigation>
-          <nav>
-            <a exact path="/">
-              HOME
-            </a>
-          </nav>
+          <Router>
+            <Link to="/">HOME</Link>
+            <Route exact path="/"></Route>
+          </Router>
         </Navigation>
         <Navigation>
-          <nav>
-            <a path="/about">ABOUT</a>
-          </nav>
+          <Router>
+            <Link to="/about">ABOUT</Link>
+            <Route path="/about"></Route>
+          </Router>
         </Navigation>
         <Navigation>
-          <nav>
-            <a path="/signup">REGISTRATION</a>
-          </nav>
+          <Router>
+            <Link to="/signup">REGISTRATION</Link>
+            <Route path="/signup"></Route>
+          </Router>
         </Navigation>
         <Navigation>
-          <nav>
-            <a path="/login">LOG IN</a>
-          </nav>
+          <Router>
+            <Link to="/login">LOG IN</Link>
+            <Route path="/login"></Route>
+          </Router>
         </Navigation>
       </Header>
 
