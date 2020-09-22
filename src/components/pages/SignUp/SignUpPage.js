@@ -31,19 +31,19 @@ const SignUpApp = () => {
     }
 
     return(
-        <form onSubmit={}>
+        <form onSubmit={submitHandler}>
             <h3>Sign Up!</h3>
             <label>
                 Email
-                <input type='text' name='email' value={formValue.email} onChange={} placeholder='Email'></input>
+                <input type='text' name='email' value={formValue.email} onChange={changeHandler} placeholder='Email'></input>
             </label>
             <label>
                 Name
-                <input type='text' name='name' value={formValue.name} onChange={} placeholder='Full Name'></input>
+                <input type='text' name='name' value={formValue.name} onChange={changeHandler} placeholder='Full Name'></input>
             </label>
             <label>
                 Create Your password
-                <input type='text' name='password' value={formValue.password} onChange={} placeholder='Password'></input>
+                <input type='text' name='password' value={formValue.password} onChange={changeHandler} placeholder='Password'></input>
             </label>
             <select id='customerType' name='customerType'>
                 <option value='client'>Client</option>
