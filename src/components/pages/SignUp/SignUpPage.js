@@ -10,6 +10,7 @@ const initialFormValues = {
   instructor: false,
 };
 
+//--------------------------STYLING-------------------------//
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -32,6 +33,7 @@ const Navigation = styled.div`
   &:hover {
     background-color: white;
     color: black;
+    border-radius: 5%;
   }
 `;
 const SignUpContainer = styled.div`
@@ -44,6 +46,13 @@ const SignUpContainer = styled.div`
   background-color: #778899;
   color: white;
 `;
+const IndividualForm = styled.div`
+  margin: 8% 0%;
+  width: 90%;
+  font-size: 1.2rem;
+`;
+
+//----------------------------- FORM --------------------------------//
 
 const SignUpPage = () => {
   const [formValue, setFormValue] = useState(initialFormValues);
@@ -69,63 +78,83 @@ const SignUpPage = () => {
     <Container>
       <Header className="headerNav">
         <Navigation>
-          <nav>HOME</nav>
+          <nav>
+            <a exact path="/">
+              HOME
+            </a>
+          </nav>
         </Navigation>
         <Navigation>
-          <nav>ABOUT</nav>
+          <nav>
+            <a path="/about">ABOUT</a>
+          </nav>
         </Navigation>
         <Navigation>
-          <nav>REGISTRATION</nav>
+          <nav>
+            <a path="/signup">REGISTRATION</a>
+          </nav>
         </Navigation>
         <Navigation>
-          <nav>SIGN IN</nav>
+          <nav>
+            <a path="/login">LOG IN</a>
+          </nav>
         </Navigation>
       </Header>
 
       <SignUpContainer className="signUpForm">
         <form onSubmit={submitHandler}>
+          <h2> LET'S GET STARTED!</h2>
           <h3>SIGN UP</h3>
-          <label>
-            Email
-            <input
-              type="text"
-              name="email"
-              value={formValue.email}
-              onChange={changeHandler}
-              placeholder="Email"
-            ></input>
-          </label>
-          <br></br>
-          <label>
-            Name
-            <input
-              type="text"
-              name="name"
-              value={formValue.name}
-              onChange={changeHandler}
-              placeholder="Full Name"
-            ></input>
-          </label>
-          <br></br>
-          <label>
-            Create Your password
-            <input
-              type="text"
-              name="password"
-              value={formValue.password}
-              onChange={changeHandler}
-              placeholder="Password"
-            ></input>
-          </label>
-          <br></br>
-          <select id="customerType" name="customerType">
-            <option value="default">-Select-</option>
-            <option value="client">Client</option>
-            <option value="instructor">Instructor</option>
-          </select>
-          <br></br>
+          <IndividualForm>
+            <label>
+              Email
+              <input
+                type="text"
+                name="email"
+                value={formValue.email}
+                onChange={changeHandler}
+                placeholder="Email"
+              ></input>
+            </label>
+          </IndividualForm>
 
-          <button>Submit</button>
+          <IndividualForm>
+            <label>
+              Name
+              <input
+                type="text"
+                name="name"
+                value={formValue.name}
+                onChange={changeHandler}
+                placeholder="Full Name"
+              ></input>
+            </label>
+          </IndividualForm>
+
+          <IndividualForm>
+            <label>
+              Create Your Password
+              <input
+                type="text"
+                name="password"
+                value={formValue.password}
+                onChange={changeHandler}
+                placeholder="Password"
+              ></input>
+            </label>
+          </IndividualForm>
+
+          <IndividualForm>
+            <select id="customerType" name="customerType">
+              <option value="default">-Select-</option>
+              <option value="client">Client</option>
+              <option value="instructor">Instructor</option>
+            </select>
+          </IndividualForm>
+
+          <IndividualForm>
+            <button>Submit</button>
+          </IndividualForm>
         </form>
       </SignUpContainer>
     </Container>
