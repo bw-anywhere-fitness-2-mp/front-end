@@ -31,12 +31,13 @@ export default function LoginContainer() {
   //      })
   //     }
   const postNewFriend = newFriend => {
-    console.log(newFriend);
+    console.log('this is new firend', newFriend);
     axios
-      .post(`https://reqres.in/api/orders`, newFriend)
+      .post(`https://reqres.in/api/orders`, newFriend) //dummy post
+      // axios.post("https://anywhere-fitness-bw-2.herokuapp.com/api/auth/login",newFriend)
       .then(res => {
         console.log('this is res', res.data);
-        //setUser([...user],res.data)
+
         setUser(user.concat(res.data));
         console.log(user);
       })
@@ -49,7 +50,6 @@ export default function LoginContainer() {
   };
 
   const change = (name, value) => {
-    //validate(name,value)
     setFormValues({
       ...formValues,
       [name]: value,
@@ -76,18 +76,17 @@ export default function LoginContainer() {
     const valueToUse = type === 'checkbox' ? checked : value;
     change(name, valueToUse);
   };
-  //getFriends()
 
   return (
     <div className="this is login" id="sign-in-widget">
       <form className="form-container" onSubmit={onSubmit}>
         <label>
-          username
+          Username <br></br>
           <input type="text" name="username" onChange={onChange} />
         </label>
-
+        <br></br>
         <label>
-          Password
+          Password <br></br>
           <input type="text" name="password" onChange={onChange} />
         </label>
 

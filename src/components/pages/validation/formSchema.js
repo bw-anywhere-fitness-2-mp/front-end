@@ -14,7 +14,5 @@ export default yup.object().shape({
     .required('Must use alphanumeric character')
     .min(6, 'password must be at least 6 characters'),
   //checkbox
-  role: yup
-    .boolean()
-    .oneOf(['instructor', 'client'], 'Must Accept Terms of Service'),
+  role: yup.string().oneOf(['instructor', 'client'], 'Must Select Role'),
 });

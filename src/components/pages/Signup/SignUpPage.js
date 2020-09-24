@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import schema from '../validation/formSchema.js';
 import * as yup from 'yup';
@@ -68,10 +68,10 @@ export default function SignUp() {
 
   const submit = () => {
     const newFriend = {
-      username: formValues.username,
-      email: formValues.email,
-      password: formValues.password,
-      role: formValues.role,
+      username: formValues.username.trim(),
+      email: formValues.email.trim(),
+      password: formValues.password.trim(),
+      role: formValues.role.trim(),
     };
     postNewFriend(newFriend);
     console.log(newFriend);
@@ -88,6 +88,12 @@ export default function SignUp() {
     const valueToUse = type === 'checkbox' ? checked : value;
     change(name, valueToUse);
   };
+
+  useEffect(() => {
+    schema.isValid(formValues).then(valid => {
+      setDisabled(!valid);
+    });
+  }, [formValues]);
   return (
     <div className="this is signup">
       <div className="errors">
@@ -95,6 +101,9 @@ export default function SignUp() {
         <p>{formErrors.email}</p>
         <p>{formErrors.password}</p>
         <p>{formErrors.role}</p>
+      </div>
+      <div className="signup">
+        <h1>Sign Up Now!</h1>
       </div>
 
       <form className="form-container" onSubmit={onSubmit}>
@@ -115,12 +124,13 @@ export default function SignUp() {
 
         <label>
           <select name="role" value={formValues.role} onChange={onChange}>
+            {console.log(formValues.role)}
             <option value="">--select role--</option>
-            <option value="Instructor">Instructor</option>
-            <option value="Client">Client</option>
+            <option value="instructor">Instructor</option>
+            <option value="client">Client</option>
           </select>
         </label>
-        <button>Submit</button>
+        <button disabled={disabled}>Submit</button>
       </form>
     </div>
   );
