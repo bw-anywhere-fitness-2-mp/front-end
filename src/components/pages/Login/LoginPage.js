@@ -4,11 +4,6 @@ import styled from 'styled-components';
 import { BrowserRouter as Router, Link, Route } from 'react-router-dom';
 import SignUpPage from '../SignUp/SignUpPage';
 
-const initialLogin = {
-  email: '',
-  password: '',
-};
-
 //---------------------STYLED------------------------//
 const Container = styled.div`
   display: flex;
@@ -65,6 +60,12 @@ const IndividualForm = styled.div`
 `;
 
 //------------------------FORM---------------------------//
+
+const initialLogin = {
+  email: '',
+  password: '',
+};
+
 const LoginPage = () => {
   const [login, setLogin] = useState(initialLogin);
 

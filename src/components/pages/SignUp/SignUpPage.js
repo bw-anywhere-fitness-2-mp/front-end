@@ -2,21 +2,17 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 import { BrowserRouter as Router, Link, Route } from 'react-router-dom';
-
-const initialFormValues = {
-  email: '',
-  name: '',
-  password: '',
-  client: true,
-  instructor: false,
-};
+import * as Yup from 'yup';
 
 //--------------------------STYLING-------------------------//
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #778899;
+  background-image: url(https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80);
+  background-size: cover;
+  height: 75vh;
   height: 99vh;
   border-left: 3px solid black;
   border-right: 3px solid black;
@@ -43,10 +39,12 @@ const Header = styled.div`
 const Navigation = styled.div`
   padding: 2%;
   margin: 1%;
+  a:visited {
+    text-decoration: none;
+  }
   &:hover {
     background-color: #dcdcdc;
     color: white;
-    text-decoration: none;
     border-radius: 5%;
   }
 `;
@@ -68,8 +66,52 @@ const IndividualForm = styled.div`
 
 //----------------------------- FORM --------------------------------//
 
+const initialFormValues = {
+  email: '',
+  name: '',
+  password: '',
+  client: true,
+  instructor: false,
+};
+
+const initialDisabled = true;
+
+//--------------------------- start of app --------------------------//
 const SignUpPage = () => {
   const [formValue, setFormValue] = useState(initialFormValues);
+  const [errors, setErrors] = useState({ ...initialFormValues, terms: '' });
+  const [post, setPost] = useState([]);
+  const [buttonDisabled, setButtonDisabled] = useState(initialDisabled);
+  const [newCustomer, setNewCustomer] = useState([]);
+
+  // Yup
+  const formSchema = Yup.object().shape({
+    email: Yup.string()
+      .email('Must be valid email')
+      .required('Email is required'),
+    name: Yup.string()
+      .required('Full Name required')
+      .min('Must be 3 characters or longer'),
+    password: Yup.string().required('Please enter password'),
+    client: Yup.boolean(),
+    instructor: Yup.boolean(),
+  });
+
+  useEffect(() => {
+    formSchema.isValid(formValue).then(valid => setButtonDisabled(!valid));
+  }, [formValue]);
+
+  // Validation
+  const Validation = (name, value) => {
+    Yup.reach(formSchema, name)
+      .validate(value)
+      .then(valid => {
+        setErrors({ ...errors, [name]: '' });
+      })
+      .catch(err => {
+        setErrors({ ...errors, [name]: err.errors[0] });
+      });
+  };
 
   //onChange Handler
   const changeHandler = evt => {
@@ -79,6 +121,7 @@ const SignUpPage = () => {
   //onSubmit Handler
   const submitHandler = evt => {
     evt.preventdefault();
+    console.log('submitted');
     const newCustomer = {
       emai: formValue.email.trim(),
       name: formValue.name.trim(),
@@ -86,6 +129,22 @@ const SignUpPage = () => {
       client: formValue.client.trim(),
       instructor: formValue.instructor.trim(),
     };
+    // const postNewCustomer = newCustomer => {
+    axios
+      .post('hhttps://reqres.in/api/users')
+      .then(res => {
+        setPost(res.data);
+        console.log(`Form submitted successfully!`, res.data);
+
+        setNewCustomer([...newCustomer, res.data]);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+  const formSubmit = e => {
+    e.preventDefault();
+    console.log('submitted');
   };
 
   return (
@@ -133,6 +192,7 @@ const SignUpPage = () => {
                 value={formValue.email}
                 onChange={changeHandler}
                 placeholder="Email"
+                error={errors}
               ></input>
             </label>
           </IndividualForm>
@@ -146,6 +206,7 @@ const SignUpPage = () => {
                 value={formValue.name}
                 onChange={changeHandler}
                 placeholder="Full Name"
+                error={errors}
               ></input>
             </label>
           </IndividualForm>
@@ -154,11 +215,12 @@ const SignUpPage = () => {
             <label>
               Create Your Password
               <input
-                type="text"
+                type="password"
                 name="password"
                 value={formValue.password}
                 onChange={changeHandler}
                 placeholder="Password"
+                error={errors}
               ></input>
             </label>
           </IndividualForm>
