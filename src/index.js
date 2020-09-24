@@ -6,11 +6,11 @@ import {
   useHistory,
   Switch,
 } from 'react-router-dom';
-import axios from 'axios';
 import { NotFoundPage } from './components/pages/NotFound';
 import { ExampleListPage } from './components/pages/ExampleList';
 import { LoginPage } from './components/pages/Login';
 import { LandingPage } from './components/pages/Landing';
+import { SignUp } from './components/pages/Signup/index.js';
 
 ReactDOM.render(
   <Router>
@@ -37,6 +37,7 @@ function App() {
     <Switch>
       <Route path="/login" component={LoginPage} />
       <Route path="/landing" component={LandingPage} />
+      <Route path="/signup" component={SignUp} />
       {/* any of the routes you need secured should be registered as SecureRoutes */}
       <Route path="/" exact component={() => <LandingPage />} />
       <Route path="/example-list" component={ExampleListPage} />

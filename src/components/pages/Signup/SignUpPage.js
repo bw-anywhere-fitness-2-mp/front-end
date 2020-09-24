@@ -2,34 +2,45 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import schema from '../validation/formSchema.js';
 import * as yup from 'yup';
-
 const initialFormValues = {
   username: '',
+  email: ',',
   password: '',
+  role: '',
 };
 
 const initialFormErrors = {
   username: '',
+  email: ',',
   password: '',
+  role: '',
 };
 const initialUser = [];
 const initialDisabled = true;
-
-export default function LoginContainer() {
+export default function SignUp() {
   const [user, setUser] = useState(initialUser);
 
   const [formValues, setFormValues] = useState(initialFormValues);
 
-  // const getFriends = () => {
-  //   axios.get(`https://anywhere-fitness-bw-2.herokuapp.com`)
-  //    .then(res =>{
-  //       console.log("this is",res)
-  //    }
-  //      )
-  //      .catch(err => {
+  const [formErrors, setFormErrors] = useState(initialFormErrors);
 
-  //      })
-  //     }
+  const [disabled, setDisabled] = useState(initialDisabled);
+
+  const validate = (name, value) => {
+    yup
+      .reach(schema, name)
+      .validate(value)
+      .then(valid => {
+        setFormErrors({ ...formErrors, [name]: '' });
+      })
+      .catch(err => {
+        setFormErrors({
+          ...formErrors,
+          [name]: err.errors[0],
+        });
+      });
+  };
+
   const postNewFriend = newFriend => {
     console.log(newFriend);
     axios
@@ -38,7 +49,6 @@ export default function LoginContainer() {
         console.log('this is res', res.data);
         //setUser([...user],res.data)
         setUser(user.concat(res.data));
-        console.log(user);
       })
       .catch(err => {
         console.log(err);
@@ -49,7 +59,7 @@ export default function LoginContainer() {
   };
 
   const change = (name, value) => {
-    //validate(name,value)
+    validate(name, value);
     setFormValues({
       ...formValues,
       [name]: value,
@@ -58,8 +68,10 @@ export default function LoginContainer() {
 
   const submit = () => {
     const newFriend = {
-      name: formValues.username,
+      username: formValues.username,
+      email: formValues.email,
       password: formValues.password,
+      role: formValues.role,
     };
     postNewFriend(newFriend);
     console.log(newFriend);
@@ -76,10 +88,15 @@ export default function LoginContainer() {
     const valueToUse = type === 'checkbox' ? checked : value;
     change(name, valueToUse);
   };
-  //getFriends()
-
   return (
-    <div className="this is login" id="sign-in-widget">
+    <div className="this is signup">
+      <div className="errors">
+        <p>{formErrors.username}</p>
+        <p>{formErrors.email}</p>
+        <p>{formErrors.password}</p>
+        <p>{formErrors.role}</p>
+      </div>
+
       <form className="form-container" onSubmit={onSubmit}>
         <label>
           username
@@ -91,6 +108,18 @@ export default function LoginContainer() {
           <input type="text" name="password" onChange={onChange} />
         </label>
 
+        <label>
+          Email
+          <input type="text" name="email" onChange={onChange} />
+        </label>
+
+        <label>
+          <select name="role" value={formValues.role} onChange={onChange}>
+            <option value="">--select role--</option>
+            <option value="Instructor">Instructor</option>
+            <option value="Client">Client</option>
+          </select>
+        </label>
         <button>Submit</button>
       </form>
     </div>

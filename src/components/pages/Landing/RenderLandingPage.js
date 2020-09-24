@@ -13,6 +13,8 @@ function RenderLandingPage(props) {
           <Link to="/login">Login</Link> <br></br>
           <Link to="/">Home</Link> <br></br>
           <Link to="/example-list">Example List of Items</Link>
+          <br></br>
+          <Link to="/signup">SignUp</Link>
         </p>
       </div>
     </div>
