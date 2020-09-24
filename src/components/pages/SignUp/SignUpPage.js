@@ -97,55 +97,51 @@ const SignUpPage = () => {
     instructor: Yup.boolean(),
   });
 
-  useEffect(() => {
-    formSchema.isValid(formValue).then(valid => setButtonDisabled(!valid));
-  }, [formValue]);
+  // useEffect(() => {
+  //   formSchema.isValid(formValue).then(valid => setButtonDisabled(!valid));
+  // }, [formValue]);
 
-  // Validation
-  const Validation = (name, value) => {
-    Yup.reach(formSchema, name)
-      .validate(value)
-      .then(valid => {
-        setErrors({ ...errors, [name]: '' });
-      })
-      .catch(err => {
-        setErrors({ ...errors, [name]: err.errors[0] });
-      });
-  };
+  // // Validation
+  // const Validation = (name, value) => {
+  //   Yup.reach(formSchema, name)
+  //     .validate(value)
+  //     .then(valid => {
+  //       setErrors({ ...errors, [name]: '' });
+  //     })
+  //     .catch(err => {
+  //       setErrors({ ...errors, [name]: err.errors[0] });
+  //     });
+  // };
 
   //onChange Handler
   const changeHandler = evt => {
-    setFormValue(evt.target.value);
+    setFormValue({ ...formValue, [evt.target.name]: evt.target.value });
   };
 
   //onSubmit Handler
   const submitHandler = evt => {
-    evt.preventdefault();
-    console.log('submitted');
-    const newCustomer = {
-      emai: formValue.email.trim(),
-      name: formValue.name.trim(),
-      password: formValue.password.trim(),
-      client: formValue.client.trim(),
-      instructor: formValue.instructor.trim(),
-    };
-    const postNewCustomer = newCustomer => {
-      axios
-        .post('https://reqres.in/api/users')
-        .then(res => {
-          setPost(res.data);
-          console.log(`Form submitted successfully!`, res.data);
+    evt.preventDefault();
+    console.log('submit submitted');
 
-          setNewCustomer([...newCustomer, res.data]);
-        })
-        .catch(err => {
-          console.log(err);
-        });
+    const newCustomer = {
+      email: formValue.email,
+      name: formValue.name,
+      password: formValue.password,
+      client: formValue.client,
+      instructor: formValue.instructor,
     };
-  };
-  const formSubmit = e => {
-    e.preventDefault();
-    console.log('submitted');
+    axios
+      .post('https://reqres.in/api/users')
+      .then(res => {
+        // setPost(res.data);
+        setPost(newCustomer);
+        console.log(`Form submitted successfully!`, newCustomer);
+      })
+      .catch(err => {
+        console.log(err);
+      })
+      .finally(setFormValue(initialFormValues));
+    console.log(post);
   };
 
   return (
@@ -188,7 +184,7 @@ const SignUpPage = () => {
             <label>
               Email
               <input
-                type="text"
+                type="email"
                 name="email"
                 value={formValue.email}
                 onChange={changeHandler}
