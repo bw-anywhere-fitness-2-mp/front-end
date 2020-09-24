@@ -102,19 +102,21 @@ const SignUpPage = () => {
   }, [formValue]);
 
   // Validation
-  const Validation = (name, value) => {
-    Yup.reach(formSchema, name)
-      .validate(value)
+  const validation = evt => {
+    Yup.reach(formSchema, evt.target.name)
+      .validate(evt.target.value)
       .then(valid => {
-        setErrors({ ...errors, [name]: '' });
+        setErrors({ ...errors, [evt.target.name]: '' });
       })
       .catch(err => {
-        setErrors({ ...errors, [name]: err.errors[0] });
+        console.log('ErRoR!');
+        setErrors({ ...errors, [evt.target.name]: err.errors[0] });
       });
   };
 
   //onChange Handler
   const changeHandler = evt => {
+    validation(evt.target.name, evt.target.value);
     setFormValue({ ...formValue, [evt.target.name]: evt.target.value });
   };
 
@@ -222,7 +224,11 @@ const SignUpPage = () => {
           </IndividualForm>
 
           <IndividualForm>
-            <select id="customerType" name="customerType">
+            <select
+              id="customerType"
+              name="customerType"
+              onChange={changeHandler}
+            >
               <option value="default">-Select-</option>
               <option value="client">Client</option>
               <option value="instructor">Instructor</option>
