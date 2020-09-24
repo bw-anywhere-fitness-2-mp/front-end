@@ -97,21 +97,21 @@ const SignUpPage = () => {
     instructor: Yup.boolean(),
   });
 
-  // useEffect(() => {
-  //   formSchema.isValid(formValue).then(valid => setButtonDisabled(!valid));
-  // }, [formValue]);
+  useEffect(() => {
+    formSchema.isValid(formValue).then(valid => setButtonDisabled(!valid));
+  }, [formValue]);
 
-  // // Validation
-  // const Validation = (name, value) => {
-  //   Yup.reach(formSchema, name)
-  //     .validate(value)
-  //     .then(valid => {
-  //       setErrors({ ...errors, [name]: '' });
-  //     })
-  //     .catch(err => {
-  //       setErrors({ ...errors, [name]: err.errors[0] });
-  //     });
-  // };
+  // Validation
+  const Validation = (name, value) => {
+    Yup.reach(formSchema, name)
+      .validate(value)
+      .then(valid => {
+        setErrors({ ...errors, [name]: '' });
+      })
+      .catch(err => {
+        setErrors({ ...errors, [name]: err.errors[0] });
+      });
+  };
 
   //onChange Handler
   const changeHandler = evt => {
@@ -141,7 +141,6 @@ const SignUpPage = () => {
         console.log(err);
       })
       .finally(setFormValue(initialFormValues));
-    console.log(post);
   };
 
   return (
