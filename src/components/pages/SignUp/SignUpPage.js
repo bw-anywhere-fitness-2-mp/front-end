@@ -10,7 +10,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-image: url(https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80);
+  background-image: url(https://images.unsplash.com/photo-1557564437-0995702f88fc?ixlib=rb-1.2.1&auto=format&fit=crop&w=2550&q=80);
   background-size: cover;
   height: 75vh;
   height: 99vh;
@@ -129,18 +129,19 @@ const SignUpPage = () => {
       client: formValue.client.trim(),
       instructor: formValue.instructor.trim(),
     };
-    // const postNewCustomer = newCustomer => {
-    axios
-      .post('hhttps://reqres.in/api/users')
-      .then(res => {
-        setPost(res.data);
-        console.log(`Form submitted successfully!`, res.data);
+    const postNewCustomer = newCustomer => {
+      axios
+        .post('https://reqres.in/api/users')
+        .then(res => {
+          setPost(res.data);
+          console.log(`Form submitted successfully!`, res.data);
 
-        setNewCustomer([...newCustomer, res.data]);
-      })
-      .catch(err => {
-        console.log(err);
-      });
+          setNewCustomer([...newCustomer, res.data]);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    };
   };
   const formSubmit = e => {
     e.preventDefault();

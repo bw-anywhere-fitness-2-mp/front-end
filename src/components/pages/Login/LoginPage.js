@@ -9,7 +9,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #778899;
+  background-image: url(https://images.unsplash.com/photo-1526401485004-46910ecc8e51?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2550&q=80);
   height: 99vh;
   border-left: 3px solid black;
   border-right: 3px solid black;
@@ -66,8 +66,14 @@ const initialLogin = {
   password: '',
 };
 
+const initialDisabled = true;
+
+//-------------------- app -------------------------//
 const LoginPage = () => {
   const [login, setLogin] = useState(initialLogin);
+  const [errors, setErrors] = useState({ ...initialLogin, terms: '' });
+  const [post, setPost] = useState([]);
+  const [buttonDisabled, setButtonDisabled] = useState(initialDisabled);
 
   //onChange Handler
   const changeHandler = evt => {
@@ -78,6 +84,10 @@ const LoginPage = () => {
   const submitHandler = evt => {
     evt.preventdefault();
   };
+  const formSubmit = e => {
+    e.preventDefault();
+    console.log('submitted');
+  };
 
   return (
     <Container>
@@ -86,28 +96,22 @@ const LoginPage = () => {
           <h1>Anywhere Fitness</h1>
         </PageTitle>
         <Navigation>
-          <Router>
-            <Link to="/">HOME</Link>
-            <Route exact path="/"></Route>
-          </Router>
+          <Link to="/">HOME</Link>
+          <Route exact path="/"></Route>
         </Navigation>
         <Navigation>
-          <Router>
-            <Link to="/about">ABOUT</Link>
-            <Route path="/about"></Route>
-          </Router>
+          <Link to="/about">ABOUT</Link>
+          <Route path="/about"></Route>
         </Navigation>
         <Navigation>
-          <Router>
-            <Link to="/signup">REGISTRATION</Link>
-            <Route path="/signup"></Route>
-          </Router>
+          <Link to="/signup">REGISTRATION</Link>
+          <Route path="/signup">
+            <SignUpPage />
+          </Route>
         </Navigation>
         <Navigation>
-          <Router>
-            <Link to="/login">LOG IN</Link>
-            <Route path="/login"></Route>
-          </Router>
+          <Link to="/login">LOG IN</Link>
+          <Route path="/login"></Route>
         </Navigation>
       </Header>
 
@@ -123,6 +127,7 @@ const LoginPage = () => {
                 name="email"
                 value={login.email}
                 onChange={changeHandler}
+                error={errors}
               ></input>
             </label>
           </IndividualForm>
@@ -135,6 +140,7 @@ const LoginPage = () => {
                 name="password"
                 value={login.password}
                 onChange={changeHandler}
+                error={errors}
               ></input>
             </label>
           </IndividualForm>
