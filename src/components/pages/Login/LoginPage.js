@@ -94,7 +94,7 @@ const LoginPage = () => {
   const loginSchema = Yup.object().shape({
     username: Yup.string()
       .required('Email is required')
-      .min('Usernmae must 2 characters or longer'),
+      .min(2, 'Usernmae must 2 characters or longer'),
     password: Yup.string().required('Please enter password'),
   });
 
@@ -113,8 +113,8 @@ const LoginPage = () => {
     evt.preventdefault();
     console.log('submitted');
     const User = {
-      username: login.username,
-      password: login.password,
+      username: login.username.trim(),
+      password: login.passwor.trim(),
     };
     postLogin(User);
     setLogin(initialLogin);

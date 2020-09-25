@@ -118,7 +118,7 @@ const SignUpPage = () => {
       .required('Email is required'),
     username: Yup.string()
       .required('Full Name required')
-      .min('Name must be 3 characters or longer'),
+      .min(3, 'Name must be 3 characters or longer'),
     password: Yup.string().required('Please enter password'),
     role: Yup.string().oneOf(['Client', 'Instructor'], 'Role is required'),
   });
@@ -152,9 +152,9 @@ const SignUpPage = () => {
     console.log('submit submitted');
 
     const newCustomer = {
-      email: formValue.email,
-      username: formValue.username,
-      password: formValue.password,
+      email: formValue.email.trim(),
+      username: formValue.username.trim(),
+      password: formValue.password.trim(),
       role: formValue.role,
     };
     postCustomers(newCustomer);
