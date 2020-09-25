@@ -68,10 +68,9 @@ const IndividualForm = styled.div`
 
 const initialFormValues = {
   email: '',
-  name: '',
+  username: '',
   password: '',
-  client: true,
-  instructor: false,
+  role: '',
 };
 
 const initialDisabled = true;
@@ -79,22 +78,49 @@ const initialDisabled = true;
 //--------------------------- start of app --------------------------//
 const SignUpPage = () => {
   const [formValue, setFormValue] = useState(initialFormValues);
+  const [customers, setCustomers] = useState([]);
   const [errors, setErrors] = useState({ ...initialFormValues, terms: '' });
   const [post, setPost] = useState([]);
   const [buttonDisabled, setButtonDisabled] = useState(initialDisabled);
-  const [newCustomer, setNewCustomer] = useState([]);
+  // const [newCustomer, setNewCustomer] = useState([]);
+
+  //////////////////////////// Helpers////////////////////////
+  const getCustomers = () => {
+    axios
+      .get('https://anywhere-fitness-bw-2.herokuapp.com/')
+      .then(res => {
+        setCustomers(res.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  const postCustomers = newClient => {
+    axios
+      .post(
+        'https://anywhere-fitness-bw-2.herokuapp.com/api/auth/register',
+        newClient
+      )
+      .then(res => {
+        setCustomers([...customers, res.data]);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+  ////////////////////////////////////////////////////////////////////////////
 
   // Yup
   const formSchema = Yup.object().shape({
     email: Yup.string()
       .email('Must be valid email')
       .required('Email is required'),
-    name: Yup.string()
+    username: Yup.string()
       .required('Full Name required')
-      .min('Must be 3 characters or longer'),
+      .min('Name must be 3 characters or longer'),
     password: Yup.string().required('Please enter password'),
-    client: Yup.boolean(),
-    instructor: Yup.boolean(),
+    role: Yup.string().oneOf(['Client', 'Instructor'], 'Role is required'),
   });
 
   useEffect(() => {
@@ -116,7 +142,7 @@ const SignUpPage = () => {
 
   //onChange Handler
   const changeHandler = evt => {
-    validation(evt.target.name, evt.target.value);
+    //validation(evt.target.name, evt.target.value);
     setFormValue({ ...formValue, [evt.target.name]: evt.target.value });
   };
 
@@ -127,22 +153,12 @@ const SignUpPage = () => {
 
     const newCustomer = {
       email: formValue.email,
-      name: formValue.name,
+      username: formValue.username,
       password: formValue.password,
-      client: formValue.client,
-      instructor: formValue.instructor,
+      role: formValue.role,
     };
-    axios
-      .post('https://reqres.in/api/users')
-      .then(res => {
-        // setPost(res.data);
-        setPost(newCustomer);
-        console.log(`Form submitted successfully!`, newCustomer);
-      })
-      .catch(err => {
-        console.log(err);
-      })
-      .finally(setFormValue(initialFormValues));
+    postCustomers(newCustomer);
+    setFormValue(initialFormValues);
   };
 
   return (
@@ -152,28 +168,20 @@ const SignUpPage = () => {
           <h1>Anywhere Fitness</h1>
         </PageTitle>
         <Navigation>
-          <Router>
-            <Link to="/">HOME</Link>
-            <Route exact path="/"></Route>
-          </Router>
+          <Link to="/">HOME</Link>
+          <Route exact path="/"></Route>
         </Navigation>
         <Navigation>
-          <Router>
-            <Link to="/about">ABOUT</Link>
-            <Route path="/about"></Route>
-          </Router>
+          <Link to="/about">ABOUT</Link>
+          <Route path="/about"></Route>
         </Navigation>
         <Navigation>
-          <Router>
-            <Link to="/signup">REGISTRATION</Link>
-            <Route path="/signup"></Route>
-          </Router>
+          <Link to="/signup">REGISTRATION</Link>
+          <Route path="/signup"></Route>
         </Navigation>
         <Navigation>
-          <Router>
-            <Link to="/login">LOG IN</Link>
-            <Route path="/login"></Route>
-          </Router>
+          <Link to="/login">LOG IN</Link>
+          <Route path="/login"></Route>
         </Navigation>
       </Header>
 
@@ -197,11 +205,11 @@ const SignUpPage = () => {
 
           <IndividualForm>
             <label>
-              Name
+              UserName
               <input
                 type="text"
-                name="name"
-                value={formValue.name}
+                name="username"
+                value={formValue.username}
                 onChange={changeHandler}
                 placeholder="Full Name"
                 error={errors}
@@ -224,11 +232,7 @@ const SignUpPage = () => {
           </IndividualForm>
 
           <IndividualForm>
-            <select
-              id="customerType"
-              name="customerType"
-              onChange={changeHandler}
-            >
+            <select id="customerType" name="role" onChange={changeHandler}>
               <option value="default">-Select-</option>
               <option value="client">Client</option>
               <option value="instructor">Instructor</option>

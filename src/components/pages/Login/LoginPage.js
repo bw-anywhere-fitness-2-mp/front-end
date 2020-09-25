@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 import { BrowserRouter as Router, Link, Route } from 'react-router-dom';
+import * as Yup from 'yup';
 import SignUpPage from '../SignUp/SignUpPage';
 
 //---------------------STYLED------------------------//
@@ -62,7 +63,7 @@ const IndividualForm = styled.div`
 //------------------------FORM---------------------------//
 
 const initialLogin = {
-  email: '',
+  username: '',
   password: '',
 };
 
@@ -75,18 +76,48 @@ const LoginPage = () => {
   const [post, setPost] = useState([]);
   const [buttonDisabled, setButtonDisabled] = useState(initialDisabled);
 
+  const postLogin = client => {
+    axios
+      .post(
+        'https://anywhere-fitness-bw-2.herokuapp.com/api/auth/login',
+        client
+      )
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  //Yup
+  const loginSchema = Yup.object().shape({
+    username: Yup.string()
+      .required('Email is required')
+      .min('Usernmae must 2 characters or longer'),
+    password: Yup.string().required('Please enter password'),
+  });
+
+  useEffect(() => {
+    loginSchema.isValid(login).then(valid => setButtonDisabled(!valid));
+  }, [login]);
+
   //onChange Handler
   const changeHandler = evt => {
-    setLogin(evt.target.value);
+    //validation(evt.target.name, evt.target.value);
+    setLogin({ ...login, [evt.target.name]: evt.target.value });
   };
 
   //onSubmit Handler
   const submitHandler = evt => {
     evt.preventdefault();
-  };
-  const formSubmit = e => {
-    e.preventDefault();
     console.log('submitted');
+    const User = {
+      username: login.username,
+      password: login.password,
+    };
+    postLogin(User);
+    setLogin(initialLogin);
   };
 
   return (
@@ -121,11 +152,11 @@ const LoginPage = () => {
           <h3>Log into your account</h3>
           <IndividualForm>
             <label>
-              Email
+              Username
               <input
-                type="text"
-                name="email"
-                value={login.email}
+                type="username"
+                name="username"
+                value={login.username}
                 onChange={changeHandler}
                 error={errors}
               ></input>
@@ -136,7 +167,7 @@ const LoginPage = () => {
             <label>
               Password
               <input
-                type="text"
+                type="password"
                 name="password"
                 value={login.password}
                 onChange={changeHandler}
